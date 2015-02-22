@@ -16,7 +16,7 @@ NOTE: depending on your distriburion, the package may be named any of the follow
 # to check if set, execute:
 echo $GOPATH
 
-# if you do NOT get anything from the above, do the following:
+# if you do not get anything from the above, do the following:
 mkdir ~/.go
 export GOPATH=~/.go
 ```
@@ -25,15 +25,15 @@ export GOPATH=~/.go
 
 ### Getting and testing everything:
 
-To get this package, simply execute the following:
+##### To get this package, simply execute the following:
 ```sh
 go get "github.com/aznashwan/go-cg"
 ```
-Now you can find the package it in $GOPATH/src/github.com/aznashwan/go-cg
+Now you can find the package in $GOPATH/src/github.com/aznashwan/go-cg
 
 ##### This package has the following structure:
 * /\* -  implementation for the various individual packages
-* /applications/\* - small programs to test each of the main packages
+* /applications/\* - small programs to test each of the major packages
 
 ##### To test something from /applications, simply do the following:
 
@@ -47,7 +47,7 @@ go run the_application.go
 
 # or build a binary file and execute that:
 go build the_application.go
-./the_application.go
+./the_application
 ```
 
 **NOTE**: any files an application may write/read will be written/read from the
