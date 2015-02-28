@@ -14,7 +14,7 @@ func main() {
 	var err error
 
 	// create th new XPM object
-	XPM := xpm.NewXPM(50, 50, 1, []xpm.Color{})
+	XPM := xpm.NewXPM(50, 50, 1)
 
 	// generate and add all the colors and set the appropriate pixel column
 	for i = 0; i < 50; i++ {
@@ -33,7 +33,7 @@ func main() {
 
 		// set all pixels on the i-th column to the same color
 		for j = 0; j < 50; j++ {
-			err = XPM.SetPixel(j, i, cc)
+			err = XPM.SetPixel(i, j, cc)
 
 			if err != nil {
 				fmt.Println(err)
