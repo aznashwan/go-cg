@@ -38,7 +38,7 @@ Now you can find the package in $GOPATH/src/github.com/aznashwan/go-cg
 ##### To test something from /applications, simply do the following:
 
 ```sh
-cd $GOPATH/src/github.com/aznashwan/go-cg/applications
+cd $GOPATH/src/github.com/aznashwan/go-cg/applications/*THE_APPLICATION*/
 
 git pull # to pull in the latest version
 
