@@ -23,28 +23,36 @@ type XPM struct {
 }
 
 // NewXPM returns a new XPM object
-func NewXPM(width, height, cpp uint, colors []Color) *XPM {
-	var i uint
+func NewXPM(width, height, cpp uint) *XPM {
+	var i, j uint
 
 	// create new XPM struct
 	xpm := &XPM{
 		width:  width,
 		height: height,
 		cpp:    cpp,
-		colors: colors,
+		colors: []Color{},
 		data:   make(map[uint][]string),
 	}
+
+	// add base color (white) andcoded by ~
+	xpm.AddColor(255, 255, 255, "~")
 
 	// fully initialize the data map
 	for i = 0; i < height; i++ {
 		xpm.data[i] = make([]string, width)
+
+		// initialize each pixel
+		for j = 0; j < width; j++ {
+			xpm.data[i][j] = "~"
+		}
 	}
 
 	return xpm
 }
 
-// validatePixel validates the inputs given to SetPixel
-func (xpm *XPM) validatePixel(x, y uint, cc string) error {
+// ValidatePoint validates that the given point is within the XPM's parameters
+func (xpm *XPM) ValidatePoint(x, y uint) error {
 	if x > xpm.width {
 		return fmt.Errorf("Invalid x=%d", x)
 	}
@@ -52,18 +60,26 @@ func (xpm *XPM) validatePixel(x, y uint, cc string) error {
 		return fmt.Errorf("Invalid y=%d", y)
 	}
 
+	return nil
+}
+
+// validatePixel validates the inputs given to SetPixel
+func (xpm *XPM) validatePixel(x, y uint, cc string) error {
+	if err := xpm.ValidatePoint(x, y); err != nil {
+		return err
+	}
+
 	for _, color := range xpm.colors {
 		if color.chars == cc {
 			return nil
 		}
 	}
-
 	return fmt.Errorf("Nonexistent color combination %s in this XPM", cc)
 }
 
 // SetPixel sets a pixel to the given row, column, and character combination
-// with respect to how the data matrix is represented in memory, not with
-// respect to the cartesian system
+// with respect to how the data matrix is represented in memory
+// (i.e. left-handed, 180^ rotated system)
 // Returns an error if any of the given coordinates is out of range or if
 // the color character combination has not been defined
 func (xpm *XPM) SetPixel(x, y uint, cc string) error {
@@ -71,16 +87,16 @@ func (xpm *XPM) SetPixel(x, y uint, cc string) error {
 		return err
 	}
 
-	xpm.data[x][y] = cc
+	xpm.data[y][x] = cc
 	return nil
 }
 
-// SetPixelCartesian sets a pixel at the given 0-ordered left-handed cartesian
+// SetPixelCartesian sets a pixel at the given 0-ordered right-handed cartesian
 // coordinates x and y and with the given color character combination
 // Returns an error if any of the given coordinates is out of range or if
 // the color character combination has not been defined
 func (xpm *XPM) SetPixelCartesian(x, y uint, cc string) error {
-	return xpm.SetPixel(y, x, cc)
+	return xpm.SetPixel(x, xpm.height-y, cc)
 }
 
 // AddColor adds a color to the associated XPM structure with the given
@@ -119,9 +135,9 @@ func (xpm *XPM) Serialize() ([]byte, error) {
 	}
 
 	// add each row
-	for _, row := range xpm.data {
+	for i := uint(0); i < xpm.height; i++ {
 		res = res + "\""
-		for _, col := range row {
+		for _, col := range xpm.data[i] {
 			res = res + col
 		}
 		res = res + "\",\n"
