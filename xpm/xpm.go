@@ -51,22 +51,13 @@ func NewXPM(width, height, cpp uint) *XPM {
 	return xpm
 }
 
-// ValidatePoint validates that the given point is within the XPM's parameters
-func (xpm *XPM) ValidatePoint(x, y uint) error {
+// validatePixel validates the inputs given to SetPixel
+func (xpm *XPM) validatePixel(x, y uint, cc string) error {
 	if x > xpm.width {
 		return fmt.Errorf("Invalid x=%d", x)
 	}
 	if y > xpm.height {
 		return fmt.Errorf("Invalid y=%d", y)
-	}
-
-	return nil
-}
-
-// validatePixel validates the inputs given to SetPixel
-func (xpm *XPM) validatePixel(x, y uint, cc string) error {
-	if err := xpm.ValidatePoint(x, y); err != nil {
-		return err
 	}
 
 	for _, color := range xpm.colors {
