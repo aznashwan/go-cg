@@ -8,23 +8,23 @@ import (
 // XPM is an aggregate of all the data required for an XPM image
 type XPM struct {
 	// bitmap dimesions
-	width  uint
-	height uint
+	width  int
+	height int
 
 	// number of charaters per pixel
-	cpp uint
+	cpp int
 
 	// slice of all the colors
 	colors []Color
 
 	// data is a map between each row number and a slice of strings represing
 	// the row's contents
-	data map[uint][]string
+	data map[int][]string
 }
 
 // NewXPM returns a new XPM object
-func NewXPM(width, height, cpp uint) *XPM {
-	var i, j uint
+func NewXPM(width, height, cpp int) *XPM {
+	var i, j int
 
 	// create new XPM struct
 	xpm := &XPM{
@@ -32,7 +32,7 @@ func NewXPM(width, height, cpp uint) *XPM {
 		height: height,
 		cpp:    cpp,
 		colors: []Color{},
-		data:   make(map[uint][]string),
+		data:   make(map[int][]string),
 	}
 
 	// add base color (white) andcoded by ~
@@ -52,7 +52,7 @@ func NewXPM(width, height, cpp uint) *XPM {
 }
 
 // validatePixel validates the inputs given to SetPixel
-func (xpm *XPM) validatePixel(x, y uint, cc string) error {
+func (xpm *XPM) validatePixel(x, y int, cc string) error {
 	if x > xpm.width {
 		return fmt.Errorf("Invalid x=%d", x)
 	}
@@ -73,7 +73,7 @@ func (xpm *XPM) validatePixel(x, y uint, cc string) error {
 // (i.e. left-handed, 180^ rotated system)
 // Returns an error if any of the given coordinates is out of range or if
 // the color character combination has not been defined
-func (xpm *XPM) SetPixel(x, y uint, cc string) error {
+func (xpm *XPM) SetPixel(x, y int, cc string) error {
 	if err := xpm.validatePixel(x, y, cc); err != nil {
 		return err
 	}
@@ -86,7 +86,7 @@ func (xpm *XPM) SetPixel(x, y uint, cc string) error {
 // coordinates x and y and with the given color character combination
 // Returns an error if any of the given coordinates is out of range or if
 // the color character combination has not been defined
-func (xpm *XPM) SetPixelCartesian(x, y uint, cc string) error {
+func (xpm *XPM) SetPixelCartesian(x, y int, cc string) error {
 	return xpm.SetPixel(x, xpm.height-y, cc)
 }
 
@@ -126,7 +126,7 @@ func (xpm *XPM) Serialize() ([]byte, error) {
 	}
 
 	// add each row
-	for i := uint(0); i < xpm.height; i++ {
+	for i := int(0); i < xpm.height; i++ {
 		res = res + "\""
 		for _, col := range xpm.data[i] {
 			res = res + col

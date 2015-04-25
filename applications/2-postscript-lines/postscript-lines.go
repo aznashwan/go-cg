@@ -4,8 +4,8 @@ import (
 	"flag" // for flag-handling related work
 	"fmt"
 
-	ps "github.com/aznashwan/go-cg/postscript"
-	"github.com/aznashwan/go-cg/xpm"
+	ps "../../postscript"
+	"../../xpm"
 )
 
 var usage string = `
@@ -28,12 +28,12 @@ USAGE: cmd.exe -f /path/to/input.ps -w 200 -h 200 -o /path/to/output.xpm
 // height command line argument
 // usage: -h UINT
 // mandatory
-var height uint
+var height int
 
 // width command line argument
 // usage: -w UINT
 // mandatory
-var width uint
+var width int
 
 // postscript input file command line argument
 // usage: -f /path/to/file.ps
@@ -47,8 +47,8 @@ var output string
 
 // flaginit sets up all command line flag handling
 func flaginit() {
-	flag.UintVar(&width, "w", 0, "width of the resulting bitmap")
-	flag.UintVar(&height, "h", 0, "height of the resulting bitmap")
+	flag.IntVar(&width, "w", 0, "width of the resulting bitmap")
+	flag.IntVar(&height, "h", 0, "height of the resulting bitmap")
 	flag.StringVar(&input, "f", "", "postscript input file given for processing")
 	flag.StringVar(&output, "o", "./output.xpm", "output file for resulting bitmap")
 	flag.Parse()

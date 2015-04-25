@@ -3,14 +3,14 @@ package main
 import (
 	"fmt"
 
-	"github.com/aznashwan/go-cg/xpm"
+	"../../xpm"
 )
 
 //		Assignment number 1:
 // Write a program that uses your custom XPM library to create the file of a
 // 50x50 XPM containing a red vertical gradient (#000000 -> #FF0000)
 func main() {
-	var i, j uint
+	var i, j int
 	var err error
 
 	// create th new XPM object

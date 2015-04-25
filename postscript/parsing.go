@@ -6,14 +6,14 @@ import (
 	"strings"   // for strings.Fields
 
 	// where all out postscript objects are defined:
-	"github.com/aznashwan/go-cg/postscript/objects"
+	"./objects"
 )
 
 // atois take a slice of string representations of numbers and applies atoi on
 // each, returning the resulting list
 // if any error occurs for a conversion; the function will promptly return it
-func atois(strings []string) ([]uint, error) {
-	uints := []uint{}
+func atois(strings []string) ([]int, error) {
+	ints := []int{}
 
 	for _, str := range strings {
 		// attempt conversion to int
@@ -22,11 +22,11 @@ func atois(strings []string) ([]uint, error) {
 			return nil, err
 		}
 
-		// cast to uint and append to result
-		uints = append(uints, uint(n))
+		// cast to int and append to result
+		ints = append(ints, int(n))
 	}
 
-	return uints, nil
+	return ints, nil
 }
 
 // ParseFile parses a postscript file and returns a slice of all Line objects
@@ -59,16 +59,16 @@ func ParseFile(filename string) ([]*objects.Line, error) {
 	// pass through all items and interpret all fields preceding "Line"
 	for i, item := range items {
 		if item == "Line" {
-			// fetch uints preceding "Line"
-			uints, err := atois(items[i-4 : i])
+			// fetch ints preceding "Line"
+			ints, err := atois(items[i-4 : i])
 			if err != nil {
 				return nil, err
 			}
 
 			// create new line from fetched values
 			line := objects.NewLine(
-				objects.NewPoint(uints[0], uints[1]),
-				objects.NewPoint(uints[2], uints[3]),
+				objects.NewPoint(ints[0], ints[1]),
+				objects.NewPoint(ints[2], ints[3]),
 			)
 
 			// add the newly created line to the list of returned lines

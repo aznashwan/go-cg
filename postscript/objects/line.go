@@ -1,15 +1,24 @@
 package objects
 
-import "github.com/aznashwan/go-cg/xpm"
+import (
+	"fmt"
+
+	"../../xpm"
+)
 
 // Line is the basic structure of a postscript line definition
 type Line struct {
-	a, b *Point
+	A, B *Point
+}
+
+// String satisfies fmt.Stringer.
+func (l *Line) String() string {
+	return fmt.Sprintf("[%s - %s]", l.A, l.B)
 }
 
 // NewLine returns a newly generated Line structure
 func NewLine(a, b *Point) *Line {
-	return &Line{a: a, b: b}
+	return &Line{A: a, B: b}
 }
 
 // Draw takes an XPM image structure as parameter and proceeds to draw this
@@ -18,12 +27,12 @@ func NewLine(a, b *Point) *Line {
 // If the two points of the line are outside the image, an error is returned
 // NOTE: the given color code has to have been proviously added
 func (l *Line) Draw(xpm *xpm.XPM, color string) error {
-	// convert uint coordinates to regular ints
+	// convert int coordinates to regular ints
 	// for consistent operations below
-	x0 := int(l.a.x)
-	x1 := int(l.b.x)
-	y0 := int(l.a.y)
-	y1 := int(l.b.y)
+	x0 := int(l.A.X)
+	x1 := int(l.B.X)
+	y0 := int(l.A.Y)
+	y1 := int(l.B.Y)
 
 	// compute deltax and figure out the horizontal direction
 	// sx == 1 => "going" right, else left
@@ -55,7 +64,7 @@ func (l *Line) Draw(xpm *xpm.XPM, color string) error {
 
 	for {
 		// draw the current pixel
-		seterror := xpm.SetPixelCartesian(uint(x0), uint(y0), color)
+		seterror := xpm.SetPixelCartesian(int(x0), int(y0), color)
 		if seterror != nil {
 			return seterror
 		}
