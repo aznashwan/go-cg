@@ -51,7 +51,7 @@ go build the_application.go
 ```
 
 **NOTE**: any files an application may write/read will be written/read from the
-current working dorectory!
+current working directory!
 
 ### Additional resources:
 
